@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+body{
+   background-color: #6ACFC7;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: color-mix(in srgb, #6ACFC7 70%, #0C1A1A );
+    color: black;
+    padding: 10px;
+    margin: -3px;
+    position:fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+}
+
+.header a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+
+
+.tit1{
+    font-size: 20px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif; 
+}
+
+th, td {
+    padding: 10px;
+    text-align:center;
+    font-size: 14px; 
+    color: #ffff; 
+}
+th{
+    text-align: center;
+}
+
+thead {
+
+    color: #fff;
+}
+
+th {
+    font-weight: bold;
+    color: #fff;
+}
+tr:hover{
+    background-color: color-mix(in srgb, #6ACFC7 70%, #0C1A1A 20%, #fff 10%);
+}
+.book{
+   padding: 5px 10px;
+    background-color: #fff; 
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 40px;
+    width: 145px;
+}
+
+.book:hover{
+    transform: scale(1.1);
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+/* Style for the buttons */
+button.delete-button,
+button.update-button {
+    padding: 5px 10px;
+    background-color: #fff; /* Red for Delete */
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+button.update-button {
+    background-color: #fff; /* Green for Update */
+}
+
+/* Hover effect */
+button.delete-button:hover,
+button.update-button:hover {
+    background-color: #d32f2f;
+    transform: scale(1.1); /* Darker Red for Delete */
+}
+
+button.update-button:hover {
+    background-color: #45a049;
+    transform: scale(1.1); /* Darker Green for Update */
+}
+
+
+@media (min-width: 768px) {
+    .header {
+        padding: 10px;
+    }
+}
+
+/* Desktop and larger screens (992px and up) */
+@media (min-width: 992px) {
+    .left img {
+        width: 300px;
+        height: 30px;
+    }
+}
+
+/* Large screens (1200px and up) */
+@media (min-width: 1200px) {
+    .header {
+        padding: 20px;
+    }
+}
+
+h1{
+    color: #fff;
+}
+
+
+
+    </style>
+    </head>
+<body>
+    <div id="app">
+        <div class="header">
+            <div class="right">
+               <button onclick="location.href='http://localhost:4001/bookform'" type="button" class="book">
+         Book a meet</button>
+            </div>
+            <div class="left">
+     <img src="https://www.vuedata.com/assets/vuedata%20light.png" alt="Logo" style="width: 250px; height:25px">
+            </div>
+        </div>
+    <h1>{{title}}</h1>
+    <table>
+        <thead>
+            
+                <th>Employee Name</th>
+                <th>Room Name</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Action</th>
+            
+        </thead>
+        <tbody>
+            {{#each bookings}}
+            <tr>
+                <td>{{this.employeeName}}</td>
+                <td>{{this.roomName}}</td>
+                <td id="convertedDate">{{this.date}}</td>
+                <td>{{this.startTime}}</td>
+                <td>{{this.endTime}}</td>
+                <td class="button-container">
+               <button class="update-button" data-id="{{this}}" onclick="updatebooking('{{this.employeeId}}','{{this.roomName}}','{{this.date}}','{{this.startTime}}','{{this.endTime}}','{{this._id}}')">
+                <i class="fas fa-pencil-alt"></i>
+               </button>
+               <button class="delete-button" data-id="{{this._id}}" id="delete">
+    <i class="fas fa-trash-alt"></i>
+               </button>
+            </td>
+            </tr>
+            {{/each}}
+        </tbody>
+        <div class="pagination">
+    <button id="prev-button">Previous</button>
+    <button id="next-button">Next</button>
+</div>
+    </table>
+    
+    </div>
+<script>
+
+
+      fetch('/getEmpAndRoom', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the API response here
+                console.log(data);
+                // Convert the data to JSON strings
+const employeesJSON = JSON.stringify(data.employees);
+const roomsJSON = JSON.stringify(data.rooms);
+
+// Store in sessionStorage
+sessionStorage.setItem('employees', employeesJSON);
+sessionStorage.setItem('rooms', roomsJSON);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+
+    const updatebooking=(employeeId,roomName,date,startTime,endTime,bookingId)=>{
+        console.log(bookingId)
+        sessionStorage.setItem('bookingId', bookingId);
+       sessionStorage.setItem('employeeId', employeeId);
+    sessionStorage.setItem('roomName', roomName);
+    sessionStorage.setItem('date', date);
+    sessionStorage.setItem('startTime', startTime);
+    sessionStorage.setItem('endTime', endTime);
+      window.location.href= 'getupdate'
+    }
+
+    
+
+  const deletebuttons = document.querySelectorAll('.delete-button')
+
+  deletebuttons.forEach (button => {
+    button.addEventListener('click', function() {
+        const bookingId = this.getAttribute('data-id');
+
+        const confirmation = window.confirm('Are you sure you want to delete this booking?');
+
+
+         if (confirmation) {
+            fetch(`/deletebooking`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ _id: button.dataset.id }),
+            })
+                .then(data => {
+                    console.log(data);
+                    if (data.status === 200) {
+                        const listItem = button.parentNode.parentNode;
+                        listItem.remove();
+                        alert('Booking Deleted Successfully');
+                    } else {
+                        alert('An error occurred while deleting the booking');
+                    }
+                });
+        }
+    });
+});
+    
+</script>
+</body>
+</html>

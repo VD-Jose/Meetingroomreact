@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+body{
+  background-color: color-mix(in srgb, #6ACFC7 70%, #0C1A1A );
+  backdrop-filter: blur(2px);
+}
+form {
+    max-width: 400px;
+    margin: 35px auto;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    color: #333;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+input[type="date"], input[type="time"] {
+    width: 95%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+button {
+    display: block;
+    margin: 9px;
+    margin-left: 30%;
+    width: 40%;
+    padding: 9px;
+    background-color: color-mix(in srgb, #6ACFC7 70%, #0C1A1A );
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #6ACFC7;
+}
+
+    </style>
+    </head>
+<body>
+      <form id="edit-form" action="/bookroom" method="POST">
+        <label for="employeeId">Employee ID:</label>
+        <select id="employeeId" name="employeeId" disabled>
+            <option value="">Select your employee Id</option>
+            {{#each formvalues.employees}}
+                <option value="{{this.id}}">{{this.employeeId}}</option>
+            {{/each}}
+        </select>
+        <label for="roomName">Room Name:</label>
+        <select id="roomName" name="roomName" required>
+            <option value="">Select your room</option>
+            {{#each formvalues.rooms}}
+                <option value="{{this.name}}">{{this.name}}</option>
+            {{/each}}
+        </select>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="startTime">Start Time:</label>
+        <input type="time" id="startTime" name="startTime" required>
+
+        <label for="endTime">End Time:</label>
+        <input type="time" id="endTime" name="endTime" required>
+
+        <button type="submit" id="save-button">Save Changes</button>
+    </form>
+
+    
+    <script>
+
+
+        function convertToTimeInputFormat(dateString) {
+    const date = new Date(dateString);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    console.log(`${hours}:${minutes}`)
+    return `${hours}:${minutes}`;
+}
+
+function convertToDateInputFormat(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+    const day = date.getDate().toString().padStart(2, '0');
+
+    const dateInputFormat = `${year}-${month}-${day}`;
+    return dateInputFormat;
+}
+        // Add an event listener to load data from sessionStorage when the page loads
+        window.addEventListener('DOMContentLoaded', function () {
+            // Retrieve data from sessionStorage
+            const storedEmployeeId = sessionStorage.getItem('employeeId');
+            const storedRoomName = sessionStorage.getItem('roomName');
+            const storedDate = sessionStorage.getItem('date');
+            const storedStartTime = sessionStorage.getItem('startTime');
+            const storedEndTime = sessionStorage.getItem('endTime');
+            // Set the retrieved values to the form elements
+            document.getElementById('employeeId').value = storedEmployeeId;
+            document.getElementById('roomName').value = storedRoomName;
+            document.getElementById('date').value =convertToDateInputFormat(storedDate);
+            document.getElementById('startTime').value = convertToTimeInputFormat(storedStartTime);
+            document.getElementById('endTime').value = convertToTimeInputFormat(storedEndTime);
+
+                    // Retrieve and parse the data from sessionStorage
+const storedEmployeesJSON = sessionStorage.getItem('employees');
+const storedRoomsJSON = sessionStorage.getItem('rooms');
+
+// Parse the JSON strings back to JavaScript objects
+const storedEmployees = JSON.parse(storedEmployeesJSON);
+const storedRooms = JSON.parse(storedRoomsJSON);
+
+// Reference the select elements in your form
+const employeeSelect = document.getElementById('employeeId');
+const roomSelect = document.getElementById('roomName');
+
+// Function to populate the select options
+function populateSelectOptions(selectElement, data, valueKey, textKey) {
+    selectElement.innerHTML = ''; // Clear existing options
+    const defaultOption = document.createElement('option');
+    defaultOption.value = "";
+    selectElement.appendChild(defaultOption);
+
+    data.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item[valueKey];
+        option.text = item[textKey];
+        selectElement.appendChild(option);
+    });
+
+    function setPredefinedSelectedValue(selectElement, value) {
+        console.log(selectElement)
+        console.log(value)
+    for (let option of selectElement.options) {
+        if (option.value === value) {
+            option.selected = true;
+            break;
+        }
+    }
+}
+console.log(storedEmployeeId)
+console.log(storedRoomName)
+// Set predefined values for the select elements
+setPredefinedSelectedValue(employeeSelect, storedEmployeeId);
+setPredefinedSelectedValue(roomSelect, storedRoomName);
+}
+
+// Call the function to populate the select options with employee and room data
+populateSelectOptions(employeeSelect, storedEmployees, 'employeeId', 'employeeId');
+populateSelectOptions(roomSelect, storedRooms, 'name', 'name');
+        });
+
+ const saveButton = document.getElementById('save-button');
+        saveButton.addEventListener('click', function (event) {
+            event.preventDefault();
+   const employeeName = document.getElementById('employeeId').value;
+            const roomName = document.getElementById('roomName').value;
+            const date = document.getElementById('date').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+
+            const formData = {
+                employeeId:employeeName,
+                roomName,
+                date,
+                startTime,
+                endTime,
+            };
+                   const bookingId = sessionStorage.getItem('bookingId');
+                   console.log(formData)
+                        fetch(`/editbooking/${bookingId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the API response here
+                console.log(data);
+                if(data.message==='Event created'){
+                    
+                }
+         else {
+            alert(data.message)
+            window.location.href= 'bookings'
+         }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        })
+
+
+        </script>
+</body>
+</html>
+
+
+
+   
+ 

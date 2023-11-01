@@ -1,0 +1,122 @@
+body{
+    background-color: #6ACFC7;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #6ACFC7;
+    color: black;
+    padding: 10px;
+    margin: -8px;
+}
+
+.header a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+
+
+.tit1{
+    font-size: 20px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif; /* Change the font family */
+}
+
+th, td {
+    padding: 10px;
+    text-align:center;
+    font-size: 14px; /* Change the font size */
+    color: #ffff; /* Change the font color */
+}
+th{
+    text-align: center;
+}
+
+thead {
+
+    color: #fff;
+}
+
+th {
+    font-weight: bold;
+    color: #fff;
+    background-color: #0C1A1A;
+}
+
+
+/* Add some hover effect to rows */
+
+
+tr:hover {
+    background-color: #0C1A1A;
+}
+.book{
+   padding: 5px 10px;
+    background-color: #fff; /* Red for Delete */
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 40px;
+    width: 145px;
+}
+.button-container {
+    display: flex;
+    justify-content: center; /* Horizontally center the buttons */
+    align-items: center; /* Vertically center the buttons */
+}
+/* Style for the buttons */
+button.delete-button,
+button.update-button {
+    padding: 5px 10px;
+    background-color: #fff; /* Red for Delete */
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+button.update-button {
+    background-color: #fff; /* Green for Update */
+}
+
+/* Hover effect */
+button.delete-button:hover,
+button.update-button:hover {
+    background-color: #d32f2f; /* Darker Red for Delete */
+}
+
+button.update-button:hover {
+    background-color: #45a049; /* Darker Green for Update */
+}
+
+@media (min-width: 768px) {
+    .header {
+        padding: 10px;
+    }
+}
+
+/* Desktop and larger screens (992px and up) */
+@media (min-width: 992px) {
+    .left img {
+        width: 300px;
+        height: 30px;
+    }
+}
+
+/* Large screens (1200px and up) */
+@media (min-width: 1200px) {
+    .header {
+        padding: 20px;
+    }
+}
+
+h1{
+    color: #fff;
+}

@@ -1,0 +1,32 @@
+{
+  "name": "meetingroom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apidoc": "^0.17.7",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.18.2",
+    "express-handlebars": "^7.1.2",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.27",
+    "mongoose": "^5.7.6",
+    "mongoose-paginate-v2": "^1.7.4",
+    "nodemailer": "^6.3.1",
+    "nodemailer.js": "0.0.2-security",
+    "nodemon": "^3.0.1",
+    "pino": "^5.13.5",
+    "redis": "^2.8.0",
+    "shortid": "^2.2.15",
+    "socket.io": "^2.3.0",
+    "toastr": "^2.1.4"
+  }
+}

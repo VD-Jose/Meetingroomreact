@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="/static/styles2.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            position: fixed;
+            width: 100%;
+
+
+        }
+
+        .container {
+            display: flex;
+            align-items: flex-start;
+
+        }
+
+        .form-container {
+            flex: 1;
+            padding: 20px;
+            background-color: #0C1A1A;
+            /* Add a background color to the form container */
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(4px);
+            height: 100vh;
+            width: 50%;
+
+        }
+
+        .text-container {
+            flex: 1;
+            padding: 20px;
+            background-color: color-mix(in srgb, #6ACFC7 70%, #0C1A1A);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            width: 50%;
+            transition: transform 0.3s, filter 0.3s;
+            backdrop-filter: blur(4px);
+
+
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40%;
+            color: #0C1A1A;
+            z-index: 1;
+
+        }
+
+        h1:hover {
+            transform: scale(1.1);
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            height: 40px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #fff;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+
+        input[type="date"],
+        input[type="time"] {
+            width: 95%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+
+        button {
+            display: block;
+            margin: 9px;
+            margin-left: 34%;
+            width: 40%;
+            padding: 9px;
+            background-color: color-mix(in srgb, #6ACFC7 70%, #0C1A1A);
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #6ACFC7;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="text-container">
+            <h1>{{title1}} <br> {{title}}</h1>
+            <img src="" alt="" />
+        </div>
+        <div class="form-container">
+
+            <form id="edit-form" action="/bookroom" method="POST">
+                <label for="employeeId">Employee ID:</label>
+                <select id="employeeId" name="employeeId" required>
+                    <option value="">Select your employee Id</option>
+                    {{#each formvalues.employees}}
+                    <option value="{{this.employeeId}}">{{this.employeeId}} </option>
+                    {{/each}}
+                </select>
+                <label for="roomName">Room Name:</label>
+                <select id="roomName" name="roomName" required>
+                    <option value="">Select your room</option>
+                    {{#each formvalues.rooms}}
+                    <option value="{{this.name}}">{{this.name}} </option>
+                    {{/each}}
+                </select>
+
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+
+                <label for="startTime">Start Time:</label>
+                <input type="time" id="startTime" name="startTime" required>
+
+                <label for="endTime">End Time:</label>
+                <input type="time" id="endTime" name="endTime" required>
+
+                <button type="submit" id="save-button">Save Changes</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const saveButton = document.getElementById('save-button');
+            saveButton.addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent the default form submission behavior
+
+                const employeeName = document.getElementById('employeeId').value;
+                const roomName = document.getElementById('roomName').value;
+                const date = document.getElementById('date').value;
+                const startTime = document.getElementById('startTime').value;
+                const endTime = document.getElementById('endTime').value;
+
+                if (!employeeName || !roomName || !date || !startTime || !endTime) {
+                    alert('Please fill in all required fields before submitting.');
+                    return; 
+                }
+
+                const formData = {
+                    employeeId: employeeName,
+                    roomName,
+                    date,
+                    startTime,
+                    endTime,
+                };
+                console.log(formData)
+                // Send a POST request to your API endpoint
+                fetch('/bookroom', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Handle the API response here
+                        console.log(data);
+                        if (data.message === 'Event created') {
+                            window.location.href = 'bookings'
+                        }
+                        else {
+                            alert(data.message)
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+        });
+         function setMinDateTime() {
+         const now = new Date();
+         const year = now.getFullYear();
+         const month = String(now.getMonth() + 1).padStart(2, '0');
+         const day = String(now.getDate()).padStart(2, '0');
+         const hour = String(now.getHours()).padStart(2, '0');
+         const minute = String(now.getMinutes()).padStart(2, '0');
+         const dateTime = `${year}-${month}-${day}`;
+         document.getElementById('date').min = dateTime;
+        
+      }
+
+      window.onload = function(){
+        setMinDateTime()
+      }
+    </script>
+</body>
+
+</html>

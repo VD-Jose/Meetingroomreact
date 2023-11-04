@@ -1,0 +1,87 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #fff;
+  }
+  
+  .form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgb(64, 63, 63);
+    width: 400px;
+    max-height: 100vh;
+    overflow: hidden;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: sans-serif;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    font-weight: bold;
+  }
+  
+  .book-button1 {
+    width: 60%; /* Make the button take the full width of its container */
+    margin: 10px 0; /* Add spacing between buttons */
+    padding: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    margin-left: 80px;
+    font-family: sans-serif;
+  }
+  
+  .book-button1:hover{
+    background-color: #2581c2;
+  }
+  
+  select, input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #f8f8f8;
+    font-family: sans-serif;
+  }
+
+  input[type="date"],
+  input[type="time"] {
+      width: 95%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 16px;
+  }
+
+  
+@media screen and (max-width: 600px) {
+    .form-container {
+        width: 90%;
+        max-width: 90%;
+        padding: 10px;
+    }
+
+    .book-button1 {
+        width: 100%;
+        margin: 10px 0;
+        margin-left: 0;
+    }
+}

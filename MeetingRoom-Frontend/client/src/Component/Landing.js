@@ -1,27 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
-import "./Landing.css"
+import "./Landing.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-
+import toastr from 'toastr';
+import 'toastr/build/toastr.css';
+ 
 function Landing() {
     const [landingData, setLandingData] = useState(null);
-    const [loading, setLoading] = useState(null);
-    const [error, setError] = useState(null)
-
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+ 
     useEffect(() => {
         const apiUrl = 'http://127.0.0.1:4001/bookings';
-
+ 
         fetch(apiUrl)
             .then((response) => {
                 if (!response.ok) {
-                    throw new error('Response was not Okay');
+                    throw new Error('Response was not Okay');
                 }
-                console.log(response);
                 return response.json();
             })
             .then((data) => {
-                console.log(data);
                 setLandingData(data);
                 setLoading(false);
             })
@@ -30,68 +32,139 @@ function Landing() {
                 setLoading(false);
             });
     }, []);
+ 
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = landingData ? landingData.bookings.slice(indexOfFirstItem, indexOfLastItem) : [];
+ 
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+ 
+    const nextPage = () => {
+        if (currentPage < Math.ceil(landingData.bookings.length / itemsPerPage)) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+ 
+    const prevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+ 
+ 
+    const handleDelete = (bookingId) => {
+        const confirmation = window.confirm('Are you sure you want to delete this booking?');
+ 
+        if (confirmation) {
+            fetch(`http://127.0.0.1:4001/deletebooking`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ _id: bookingId }),
+            })
+                .then((response) => {
+                    if (response.status === 200) {
+                        setLandingData((prevData) => ({
+                            ...prevData,
+                            bookings: prevData.bookings.filter((booking) => booking._id !== bookingId),
+                        }));
+                        toastr.success('Booking Deleted Successfully', 'Success');
+                       
 
+                    } else if (response.status === 404) {
+                        toastr.error('Booking not found', 'Error');
+                    } else {
+                        toastr.error('An error occurred while deleting the booking', 'Error');
+                    }
+                })
+                .catch((error) => {
+                    toastr.error('An error occurred while deleting the booking', 'Error');
+                });
+        }
+    };
+ 
+    toastr.options = {
+        closeButton: true,
+        timeOut: 5000,
+        extendedTimeOut: 1000,
+        positionClass: 'toast-top-center',
+    };
+ 
     if (loading) {
         return <div>Loading...</div>;
     }
-
+ 
     if (error) {
         return <div>Error: {error.message}</div>;
     }
-
-    if (false) {
-        return null;
-    }
-
+ 
     if (!landingData) {
-        return <div> No data</div>;
+        return <div>No data</div>;
     }
-    //  if(lan)
-
-
+ 
     return (
-        <div>
-            <Navbar/>
-            
-            <h1 class="header-name">Meeting Dashboard</h1>
-            <div className='table-cont'>
-            <table>
-                <thead>
-                    <tr>
-                        <th className='name'>Employee Name</th>
-                        <th>Room Name</th>
-                        <th>Date</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th>Action</th>
+        <div className='app-container'>
+             <Navbar/>
+             <div className='content-container'>
+        <div className="meeting-table-container">
+           
+    <table className="meeting-table">
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Room Name</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {currentItems&&currentItems
+                .slice() // Use currentItems for rendering
+                .map((booking) => (
+                    <tr key={booking._id}>
+                        <td className="employee-name">{booking.employeeName}</td>
+                        <td>{booking.roomName}</td>
+                        <td>{booking.date}</td>
+                        <td>{booking.startTimeLocal}</td>
+                        <td>{booking.endTimeLocal}</td>
+                        <td className="button-container">
+                            <button className="update-button">
+                                <FontAwesomeIcon icon={faPencilAlt} />
+                            </button>
+                            <button
+                                className="delete-button"
+                                onClick={() => handleDelete(booking._id)}
+                            >
+                                <FontAwesomeIcon icon={faTrashAlt} />
+                            </button>
+                        </td>
                     </tr>
-                </thead>
-               
-                <tbody>
-                    {landingData.bookings.map((booking) => (
-                        <tr>
-                            <td>{booking.employeeName}</td>
-                            <td>{booking.roomName}</td>
-                            <td>{booking.date}</td>
-                            <td>{booking.startTime}</td>
-                            <td>{booking.endTime}</td>
-                            <td className="button-container">
-                  <button className="update-button">
-                    <FontAwesomeIcon icon={faPencilAlt} />
-                  </button>
-                  <button className="delete-button">
-                    <FontAwesomeIcon icon={faTrashAlt} />
-                  </button>
-                </td>
-                        </tr>
-                    ))}
-                </tbody>
-               
-            </table>
-            </div>
-            
-        </div>
-    )
+                ))}
+        </tbody>
+    </table>
+    </div>
+    <ul className="pagination">
+        <li className="pagination-button" onClick={prevPage}>
+            Previous
+        </li>
+        {Array.from({ length: Math.ceil(landingData.bookings.length / itemsPerPage) }, (_, index) => (
+    <li key={index} className={currentPage === index + 1 ? 'active' : ''} onClick={() => paginate(index + 1)}>
+        {index + 1}
+    </li>
+))}
+        <li className="pagination-button" onClick={nextPage}>
+            Next
+        </li>
+    </ul>
+</div>
+</div>
+    );
+ 
+ 
+       
 }
-
+ 
 export default Landing;

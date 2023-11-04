@@ -130,6 +130,8 @@ function validateStartTimeBeforeEndTime(startTime, endTime) {
     }
 }
 
+
+
 let newbooking=async(req,res)=>{
     const validateSlot=await validateBooking(req);
     if(validateSlot.length){

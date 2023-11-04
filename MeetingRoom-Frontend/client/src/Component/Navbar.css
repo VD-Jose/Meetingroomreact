@@ -1,0 +1,74 @@
+
+  
+  .header {
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header a {
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  /* Optional styles for the gradient background */
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(-9deg, black, transparent);
+    z-index: -1;
+  }
+  
+  /* Optional styles for the box shadow */
+  .header::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: -1;
+  }
+  
+  /* Styles for navbar buttons */
+.button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-right: 10px;
+    font-family: sans-serif;
+    font-weight: bold;
+  }
+  
+  .button:hover {
+    background-color: #2581c2;
+  }
+  
+  /* Styles for the "Back" button when on the BookingForm page */
+  .button-back {
+    background-color: #e74c3c;
+  }
+  
+  .button-back:hover {
+    background-color: #c5362a;
+  }
+
+  ul {
+    list-style-type: none;
+  }
+  

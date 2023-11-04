@@ -1,120 +1,117 @@
-/* Updated CSS for table and header appearance */
+/* Common styles for all screen sizes */
 
-body {
-    background-color: #f0f0f0; /* Change the background color */
-    margin: 0; /* Remove margin */
-    padding: 0; /* Remove padding */
-  }
-  .header-name{
-    text-align: left;
-    padding-top: 40px
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333; /* Dark background color */
-    color: white; /* Text color */
-    padding: 10px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 2; /* Increase z-index to make it appear above the table */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
-    background: linear-gradient(-9deg, black, transparent);
-  }
-  
-  .header a {
-    text-decoration: none;
-    color: #6ACFC7; /* Change the link color */
-    font-weight: bold;
-  }
-  
-  .table-cont {
-    max-height: calc(100vh - 128px);
-    overflow-y: auto;
-    background-color: #fff; /* White background color */
-    border-radius: 10px; /* Add rounded corners to the table container */ /* Add spacing between the header and the table */
-  }
-  
-  table {
-    width: 100%;
-    font-family: Arial, sans-serif;
-    border-collapse: collapse;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow to the table */
-  }
-  
-  th, td {
-    padding: 10px;
-    text-align: center;
-    font-size: 15px;
-    font-weight: 400;
-    color: #333; /* Text color */
-  }
-
-  .name{
-    font-weight: 900;
-  }
-  
-  th {
-    background-color: rgb(64, 63, 63);
-    font-weight: bold;
-    color: #f0f0f0;
-  }
-  
-  thead {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
-  
-  tbody {
-    background-color: #fff;
-  }
-  
-  /* Style for the buttons */
-  button.delete-button,
-  button.update-button {
-    padding: 5px 10px;
-    background-color: rgb(64, 63, 63); /* Red for Delete */
-    color: #fff; /* White text */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-right: 5px;
-    transition: background-color 0.3s, transform 0.3s;
-  }
-  
-  button.update-button {
-    background-color: rgb(64, 63, 63); /* Green for Update */
-  }
-  
-  /* Hover effect */
-  button.delete-button:hover,
-  button.update-button:hover {
-    background-color: #ff5252; /* Darker Red for Delete */
-    transform: scale(1.1);
-  }
-  
-  button.update-button:hover {
-    background-color: #66bb6a; /* Darker Green for Update */
-  }
-
-  .book{
-    padding: 5px 10px;
-    background-color: #fff;
-    color: black;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    height: 35px;
-    width: 145px;
-    font-size: 15px;
-    font-weight: bold;
-  }
-  .book:hover {
-    transform: scale(1.1);
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  height: 800px;
   
+}
+
+/* Styles for the meeting table container */
+.meeting-table-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+/* Styles for the meeting table */
+.meeting-table {
+  width: 95%;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+  margin-top: 75px;
+  font-family: sans-serif;
+}
+
+.meeting-table th, .meeting-table td {
+  padding: 10px;
+  text-align: center;
+  position: sticky;
+}
+
+.meeting-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Styles for the table rows */
+.meeting-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.meeting-table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+/* Styles for the employee name */
+.employee-name {
+  font-weight: 500;
+}
+
+/* Styles for the action buttons */
+.button-container button {
+  padding: 5px 10px;
+  margin: 5px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.update-button {
+  background-color: #27ae60;
+}
+
+.delete-button {
+  background-color: #e74c3c;
+}
+
+/* Styles for the pagination */
+.pagination {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
+
+.pagination li {
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.pagination-button {
+  background-color: #3498db;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+/* Styles for the previous and next buttons */
+.pagination-button:first-child,
+.pagination-button:last-child {
+  background-color: #007bff;
+}
+
+.pagination-button, .pagination li {
+  cursor: pointer;
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #2581c2;
+  border-radius: 3px;
+}
+
+.pagination-button:hover, .pagination li:hover {
+  background-color: #2581c2;
+}
+
+.pagination-button.active, .pagination li.active {
+  background-color: #007bff;
+  color: #fff;
+}
